@@ -7,20 +7,26 @@
     $StreetAddress= $_POST['Street_Address'];
     $City= $_POST['City'];
     $State= $_POST['State'];
-echo $State;
 //Database Connection
-  $conn = new mysqli('localhost','root','','ccl');
-  if($conn->connect_error){
-	   die('Connection Failed :'.$conn->connect_error);
-  }else{
-	   $stmt = $conn->prepare("insert into order_details(First_Name, Last_Name, Phone_Number, Type, Quantity, Street_Address, City, State);
-		  values(?, ?, ?, ?, ?, ?, ?, ?)");
-	   $stmt->bind_param("ssisisss",$FirstName, $LastName, $PhoneNumber, $Type, $Quantity, $StreetAddress, $City, $State);
-	   $stmt->execute();
-	   echo "Order Placed Successfully";
-	   $stmt->close();
-	   $conn->close();
+    
+    
 
-  }
+  $conn = new mysqli('localhost','root','','ccl');
+
+
+  if($conn === false){
+    die("ERROR: Could not connect. " . mysqli_connect_error());
+}
+ 
+// Attempt insert query execution
+$sql = "INSERT INTO order_details (First_Name, Last_Name, Phone_Number, Type, Quantity, Street_Address, City, State) VALUES ('".$FirstName."','". $LastName."','". $PhoneNumber."','". $Type."','". $Quantity."','". $StreetAddress."','". $City."','". $State."')";
+if(mysqli_query($conn, $sql)){
+    echo "Records inserted successfully.";
+} else{
+    echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
+}
+
+mysqli_close($conn);
+
 
 ?>
